@@ -22,21 +22,26 @@ int main(){
     int n, m;
     cin >> n >> m;
 
-    vector<pair<int, int>> pos(n+1);
-    rep1(i, 1, n) cin >> pos[i].first >> pos[i].second; // x, y
+    vector<pair<int, int>> pos(n);
+    rep(i, 0, n){
+        int x, y;
+        cin >> x >> y;
+        pos[i] = {y, i+1};
+    }
 
-    vector<int> ypos(n);
-    rep(i, 0, n) ypos[i] = pos[i+1].second;
-
-    sort(ypos.begin(), ypos.end()); // n log n
-    ypos.erase(unique(ypos.begin(), ypos.end()), ypos.end()); // n
+    sort(pos.begin(), pos.end());
 
     int comp[n+1];
-    rep1(i, 1, n) comp[i] = lower_bound(ypos.begin(), ypos.end(), pos[i].second) - ypos.begin(); // n log n
+    int b = -1e9 - 1;
+    int p = -1;
+    rep(i, 0, n){
+        if(pos[i].first != b) p++, b = pos[i].first;
+        comp[pos[i].second] = p;
+    }
 
-    lli arr[ypos.size()+1];
+    lli arr[p+2];
     mset(0, arr);
-    rep(i, 0, m){ // m
+    rep(i, 0, m){
         int u, v, c;
         cin >> u >> v >> c;
 
@@ -49,13 +54,9 @@ int main(){
         arr[v+1] -= c;
     }
 
-    rep(i, 1, ypos.size()){
-        arr[i] = arr[i] + arr[i-1];
-    }
-
-    lli ans = 0;
-    rep(i, 0, ypos.size()){
-        uMax(ans, arr[i]);
+    lli ans = arr[0];
+    rep(i, 1, p+1){
+        ans = max(ans, arr[i] += arr[i-1]);
     }
 
     cout << ans;
