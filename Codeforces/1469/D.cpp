@@ -29,7 +29,7 @@ int main(){
         int n;
         cin >> n;
 
-        int a[6] = {1, 2, 4, 16, 256, 65536};
+        int a[7] = {1, 2, 4, 16, 256, 65536, 200005};
 
         vector<pair<int, int>> ans;
 
